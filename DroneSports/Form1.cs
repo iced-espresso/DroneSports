@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Media;
 using System.Net.Http.Headers;
 using Microsoft.VisualBasic;
+using WMPLib;
 
 namespace DroneSports
 {
@@ -140,11 +141,13 @@ namespace DroneSports
 
         public int CONFIG_SCORE3_THRESHOLD_TIME = 12;
         public int CONFIG_SCORE2_THRESHOLD_TIME = 6;
+        private SoundPlayer startGameCountDownSound = new SoundPlayer();
         private SoundPlayer startGameSound = new SoundPlayer();
         private SoundPlayer goalSound = new SoundPlayer();
         private SoundPlayer gameEnd10sSound = new SoundPlayer();
         private SoundPlayer attackEnd5sSound = new SoundPlayer();
         private SoundPlayer restEnd10sSound = new SoundPlayer();
+        private WMPLib.WindowsMediaPlayer windowMediaPlayer = new WMPLib.WindowsMediaPlayer();
         private string getGameTime()
         {
             return CONFIG_gameTotalMin.ToString("00") + ":" + CONFIG_gameTotalSec.ToString("00");
@@ -169,6 +172,9 @@ namespace DroneSports
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.startGameCountDownSound.SoundLocation = @"경기시작카운트다운.wav";
+            this.startGameCountDownSound.LoadAsync();
+
             this.startGameSound.SoundLocation = @"경기시작.wav";
             this.startGameSound.LoadAsync();
 
@@ -216,12 +222,15 @@ namespace DroneSports
                 // 10초전 경기종료
                 if(newDt.Minute == 0 && newDt.Second == 10)
                 {
+                   
+                    
                     SoundPlayer soundPlayer = gameEnd10sSound;
                     if (currentGameMode.mode == GameModeEnum.INGAME)
-                        soundPlayer = gameEnd10sSound;
+                        windowMediaPlayer.URL = @"경기종료10초전.wav";
                     else if (currentGameMode.mode == GameModeEnum.REST)
-                        soundPlayer = restEnd10sSound;
-                    soundPlayer.Play();
+                        windowMediaPlayer.URL = @"휴식종료10초전.wav";
+
+                    windowMediaPlayer.controls.play();
                 }
 
                 if (currentGameMode.mode == GameModeEnum.INGAME)
@@ -314,6 +323,8 @@ namespace DroneSports
             scoreTimeThreshold3.Visible = true;
             scoreTimeThreshold2.Visible = true;
             scoreTimeThreshold1.Visible = true;
+
+            attackEnd5sSound.Stop();
         }
 
         public void refreshControls()
@@ -327,6 +338,11 @@ namespace DroneSports
             timeLabel.Text = getGameTime();
             SetVisibleDevButtons(false);
 
+            Application.DoEvents();
+            if (this.startGameSound.IsLoadCompleted)
+                startGameCountDownSound.PlaySync();
+
+
             attackTeam.Reset();
 
             timer1.Enabled = true;
@@ -335,6 +351,8 @@ namespace DroneSports
             prevTime = stopwatch.ElapsedMilliseconds;
             attackPrevTime = stopwatch.ElapsedMilliseconds;
             currentGameMode.Start();
+
+            this.startGameSound.Play();
         }
 
         private void pauseGame()
@@ -371,6 +389,7 @@ namespace DroneSports
             attackTeam.Reset();
 
             currentGameMode.Ready();
+
         }
 
         private void startRest(int restMinutate)
@@ -576,10 +595,6 @@ namespace DroneSports
 
         private void startGameButton_Click(object sender, EventArgs e)
         {
-            if (this.startGameSound.IsLoadCompleted)
-            {
-                this.startGameSound.PlaySync();
-            }
             startGame();
         }
 
@@ -638,6 +653,7 @@ namespace DroneSports
 
             if (score > 0)
             {
+                attackEnd5sSound.Stop();
                 goalSound.Play();
                 attackPrevTime = stopwatch.ElapsedMilliseconds;
                 attackTeam.ChangeTeam();
