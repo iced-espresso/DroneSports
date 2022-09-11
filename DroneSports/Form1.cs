@@ -1,85 +1,32 @@
 using System.Diagnostics;
 using System.Media;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using Microsoft.VisualBasic;
+using static System.Formats.Asn1.AsnWriter;
+using WMPLib;
 
 namespace DroneSports
 {
 
+
     public partial class Form1 : Form
     {
-        
+        [DllImport("user32.dll")] private static extern int RegisterHotKey(int hwnd, int id, int fsModifiers, int vk);
+        [DllImport("user32.dll")] private static extern int UnregisterHotKey(int hwnd, int id);
 
-        class AttackTeam
+        protected override void WndProc(ref Message m) 
         {
-            public Color currAttackTeam = Color.Blue;
-            public Color defaultAttackTeam = Color.Blue;
-            public Label label;
-            public TextBox textBox;
-
-            public AttackTeam(Label label, TextBox textBox)
-            {
-                this.defaultAttackTeam = Color.Blue;
-                this.currAttackTeam = this.defaultAttackTeam;
-                this.label = label;
-                this.textBox = textBox;
-                label.ForeColor = Color.Blue;
-            }
-
-            public void setRed()
-            {
-                this.currAttackTeam = Color.Red;
-                label.ForeColor = Color.Red;
-                textBox.ForeColor = Color.Red;
-            }
-
-            public void setBlue()
-            {
-                this.currAttackTeam = Color.Blue;
-                label.ForeColor = Color.Blue;
-                textBox.ForeColor = Color.Blue;
-            }
-
-            public void Reset()
-            {
-                if (currAttackTeam == Color.Blue)
+            base.WndProc(ref m);
+            if (m.Msg == (int)0x312)
+            { 
+                if (m.WParam == (IntPtr)0x0)
                 {
-                    setBlue();
+                    leftTeamScore.Text = (Convert.ToInt32(leftTeamScore.Text) + 1).ToString();
                 }
-                else if(currAttackTeam == Color.Red)
-                {
-                    setRed();
-                }
-                label.Text = CONFIG_ATTACK_TIME.ToString("00");
-            }
-
-            public void ChangeTeam()
-            {
-                if (this.currAttackTeam == Color.Blue)
-                {
-                    setRed();
-                }
-                else if (this.currAttackTeam == Color.Red)
-                {
-                    setBlue();
-                }
-            }
-
-            public void hardReset()
-            {
-                if (this.defaultAttackTeam == Color.Blue)
-                {
-                    this.defaultAttackTeam = Color.Red;
-                }
-                else if(this.defaultAttackTeam == Color.Red)
-                {
-                    this.defaultAttackTeam = Color.Blue;
-                }
-
-                this.currAttackTeam = this.defaultAttackTeam;
-                Reset();
             }
         }
+
 
         enum GameModeEnum
         {
@@ -158,12 +105,10 @@ namespace DroneSports
         public Form1()
         {
             InitializeComponent();
-            attackTeam = new AttackTeam(attackTeamTimeLabel, attackTeamTimeLabelText);
             currentGameMode = new GameMode(GameModeEnum.IDLE, gameModeLabel);
 
         }
 
-        AttackTeam attackTeam;
         GameMode currentGameMode;
 
 
@@ -191,6 +136,7 @@ namespace DroneSports
 
         private void Form1_KeyPress(object sender, KeyPressEventArgs e)
         {
+
         }
 
 
@@ -243,58 +189,6 @@ namespace DroneSports
             }
 
             
-            if (currentGameMode.mode == GameModeEnum.INGAME)
-            {
-                currentTime = stopwatch.ElapsedMilliseconds;
-                if (currentTime - attackPrevTime >= 1000)
-                {
-                    attackPrevTime = currentTime;
-
-                    int roundSecond = Convert.ToInt32(attackTeamTimeLabel.Text);
-                    if (roundSecond > 0)
-                    {
-                        attackTeamTimeLabel.Text = (roundSecond - 1).ToString("00");
-                    }
-                    else
-                    {
-                        attackTeam.ChangeTeam();
-                        attackPrevTime = currentTime;
-                        attackTeamTimeLabel.Text = CONFIG_ATTACK_TIME.ToString("00");
-                    }
-
-                    roundSecond = Convert.ToInt32(attackTeamTimeLabel.Text);
-
-                    if(roundSecond == 5)
-                    {
-                        attackEnd5sSound.Play();
-                    }
-
-                    if (roundSecond > CONFIG_SCORE3_THRESHOLD_TIME)
-                    {
-                        scoreTimeThreshold3.Visible = true;
-                        scoreTimeThreshold2.Visible = true;
-                        scoreTimeThreshold1.Visible = true;
-                    }
-                    else if (roundSecond > CONFIG_SCORE2_THRESHOLD_TIME)
-                    {
-                        scoreTimeThreshold3.Visible = false;
-                        scoreTimeThreshold2.Visible = true;
-                        scoreTimeThreshold1.Visible = true;
-                    }
-                    else if (roundSecond > 0)
-                    {
-                        scoreTimeThreshold3.Visible = false;
-                        scoreTimeThreshold2.Visible = false;
-                        scoreTimeThreshold1.Visible = true;
-                    }
-                    else if (roundSecond == 0)
-                    {
-                        scoreTimeThreshold3.Visible = false;
-                        scoreTimeThreshold2.Visible = false;
-                        scoreTimeThreshold1.Visible = false;
-                    }
-                }
-            }
         }
 
         private void SetVisibleDevButtons(bool visible)
@@ -309,17 +203,14 @@ namespace DroneSports
             timer1.Enabled = false;
             stopwatch.Stop();
             currentGameMode.End();
-            attackTeam.hardReset();
 
-            scoreTimeThreshold3.Visible = true;
-            scoreTimeThreshold2.Visible = true;
-            scoreTimeThreshold1.Visible = true;
+            UnregisterHotKey((int)this.Handle, 0);
+
         }
 
         public void refreshControls()
         {
             timeLabel.Text = getGameTime();
-            attackTeamTimeLabel.Text = CONFIG_ATTACK_TIME.ToString("00");
 
         }
         private void startGame()
@@ -327,14 +218,14 @@ namespace DroneSports
             timeLabel.Text = getGameTime();
             SetVisibleDevButtons(false);
 
-            attackTeam.Reset();
-
             timer1.Enabled = true;
             stopwatch = new Stopwatch();
             stopwatch.Start();
             prevTime = stopwatch.ElapsedMilliseconds;
             attackPrevTime = stopwatch.ElapsedMilliseconds;
             currentGameMode.Start();
+
+            RegisterHotKey((int)this.Handle, 0, 0x0, (int)Keys.Z);
         }
 
         private void pauseGame()
@@ -342,6 +233,7 @@ namespace DroneSports
             SetVisibleDevButtons(true);
             timer1.Enabled = false;
             currentGameMode.Pause();
+            UnregisterHotKey((int)this.Handle, 0);
         }
 
         private void resumeGame()
@@ -354,6 +246,8 @@ namespace DroneSports
             prevTime = stopwatch.ElapsedMilliseconds;
             attackPrevTime = stopwatch.ElapsedMilliseconds;
             currentGameMode.Start();
+
+            RegisterHotKey((int)this.Handle, 0, 0x0, (int)Keys.Z);
         }
 
         private void resetGame()
@@ -368,7 +262,6 @@ namespace DroneSports
 
 
             timeLabel.Text = getGameTime();
-            attackTeam.Reset();
 
             currentGameMode.Ready();
         }
@@ -435,15 +328,16 @@ namespace DroneSports
         {
             if(currentGameMode.mode != GameModeEnum.INGAME)
             {
-                attackTeam.hardReset();
-                scoreTimeThreshold3.Visible = true;
-                scoreTimeThreshold2.Visible = true;
-                scoreTimeThreshold1.Visible = true;
+
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
+            if (currentGameMode.mode != GameModeEnum.INGAME)
+                return;
+
+
 
         }
 
@@ -536,8 +430,6 @@ namespace DroneSports
 
         private void leftTeamScore_MouseDown(object sender, MouseEventArgs e)
         {
-            if (currentGameMode.mode == GameModeEnum.INGAME)
-                return;
             Label mylabel = leftTeamScore;
             if (e.Button == MouseButtons.Left)
                 mylabel.Text = (Convert.ToInt32(mylabel.Text) + 1).ToString();
@@ -556,8 +448,6 @@ namespace DroneSports
 
         private void rightTeamScore_MouseDown(object sender, MouseEventArgs e)
         {
-            if (currentGameMode.mode == GameModeEnum.INGAME)
-                return;
             Label mylabel = rightTeamScore;
             if (e.Button == MouseButtons.Left)
                 mylabel.Text = (Convert.ToInt32(mylabel.Text) + 1).ToString();
@@ -576,10 +466,11 @@ namespace DroneSports
 
         private void startGameButton_Click(object sender, EventArgs e)
         {
-            if (this.startGameSound.IsLoadCompleted)
-            {
-                this.startGameSound.PlaySync();
-            }
+
+            //if (this.startGameSound.IsLoadCompleted)
+            //{
+            //    this.startGameSound.PlaySync();
+            //}
             startGame();
         }
 
@@ -598,55 +489,27 @@ namespace DroneSports
 
         }
 
-        private int scoreByTime()
-        {
-            int score = 0;
-            if(scoreTimeThreshold3.Visible)
-            {
-                score += 3;
-            }
-            else if(scoreTimeThreshold2.Visible)
-            {
-                score += 2;
-            }
-            else if(scoreTimeThreshold1.Visible)
-            {
-                score += 1;
-            }
-
-            return score;
-        }
 
         private void addScoreToLabel(Label label, int score)
         {
             label.Text = (Convert.ToInt32(label.Text) + score).ToString();
+
+            if (score > 0)
+            {
+                WMPLib.WindowsMediaPlayer player = new WMPLib.WindowsMediaPlayer();
+                player.URL = @"°ñ.wav";
+                player.controls.play();
+
+                goalSound.Play();
+                attackPrevTime = stopwatch.ElapsedMilliseconds;
+ 
+            }
         }
 
         private void goalByTime()
         {
             if (currentGameMode.mode != GameModeEnum.INGAME)
                 return;
-            int score = scoreByTime();
-            if (leftTeamScore.ForeColor == attackTeam.currAttackTeam)
-            {
-                addScoreToLabel(leftTeamScore, score);
-            }
-            else if (rightTeamScore.ForeColor == attackTeam.currAttackTeam)
-            {
-                addScoreToLabel(rightTeamScore, score);
-            }
-
-            if (score > 0)
-            {
-                goalSound.Play();
-                attackPrevTime = stopwatch.ElapsedMilliseconds;
-                attackTeam.ChangeTeam();
-                attackTeam.Reset();
-
-                scoreTimeThreshold3.Visible = true;
-                scoreTimeThreshold2.Visible = true;
-                scoreTimeThreshold1.Visible = true;
-            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -667,6 +530,35 @@ namespace DroneSports
         {
             Form2 form2 = new Form2(this);
             form2.Show();
+        }
+
+        private void scoreTimeThreshold1_Click(object sender, EventArgs e)
+        {
+            if (currentGameMode.mode != GameModeEnum.INGAME)
+                return;
+
+        }
+
+        private void scoreTimeThreshold3_Click(object sender, EventArgs e)
+        {
+            if (currentGameMode.mode != GameModeEnum.INGAME)
+                return;
+
+        }
+
+        private void leftTeamMember_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void panel1_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
         }
     }
 }

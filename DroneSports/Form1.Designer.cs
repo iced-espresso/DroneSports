@@ -33,7 +33,6 @@
             this.leftTeamName = new System.Windows.Forms.TextBox();
             this.rightTeamName = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.attackTeamTimeLabel = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.코트체인지ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.경기중지ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,11 +41,7 @@
             this.설정ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameModeLabel = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.attackTeamTimeLabelText = new System.Windows.Forms.TextBox();
             this.leftTeamMember = new System.Windows.Forms.TextBox();
-            this.scoreTimeThreshold1 = new System.Windows.Forms.Button();
-            this.scoreTimeThreshold2 = new System.Windows.Forms.Button();
-            this.scoreTimeThreshold3 = new System.Windows.Forms.Button();
             this.rightTeamMember = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -57,6 +52,7 @@
             this.rightTeamSetScore = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.restStartButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -101,21 +97,6 @@
             // 
             this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // attackTeamTimeLabel
-            // 
-            this.attackTeamTimeLabel.AutoSize = true;
-            this.attackTeamTimeLabel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.attackTeamTimeLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.attackTeamTimeLabel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.attackTeamTimeLabel.Font = new System.Drawing.Font("맑은 고딕", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.attackTeamTimeLabel.Location = new System.Drawing.Point(852, 564);
-            this.attackTeamTimeLabel.Name = "attackTeamTimeLabel";
-            this.attackTeamTimeLabel.Size = new System.Drawing.Size(201, 161);
-            this.attackTeamTimeLabel.TabIndex = 0;
-            this.attackTeamTimeLabel.Text = "18";
-            this.attackTeamTimeLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.attackTeamTimeLabel.Click += new System.EventHandler(this.attackTeamTimeLabel_Click);
             // 
             // contextMenuStrip1
             // 
@@ -192,19 +173,6 @@
             this.textBox3.Text = "제 1회 드론 농구대회";
             this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // attackTeamTimeLabelText
-            // 
-            this.attackTeamTimeLabelText.CausesValidation = false;
-            this.attackTeamTimeLabelText.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.attackTeamTimeLabelText.ForeColor = System.Drawing.Color.LimeGreen;
-            this.attackTeamTimeLabelText.Location = new System.Drawing.Point(852, 515);
-            this.attackTeamTimeLabelText.Name = "attackTeamTimeLabelText";
-            this.attackTeamTimeLabelText.Size = new System.Drawing.Size(201, 47);
-            this.attackTeamTimeLabelText.TabIndex = 9;
-            this.attackTeamTimeLabelText.TabStop = false;
-            this.attackTeamTimeLabelText.Text = "공격 시간";
-            this.attackTeamTimeLabelText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // leftTeamMember
             // 
             this.leftTeamMember.Font = new System.Drawing.Font("맑은 고딕", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
@@ -215,46 +183,7 @@
             this.leftTeamMember.TabIndex = 10;
             this.leftTeamMember.TabStop = false;
             this.leftTeamMember.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // scoreTimeThreshold1
-            // 
-            this.scoreTimeThreshold1.BackColor = System.Drawing.Color.Lime;
-            this.scoreTimeThreshold1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.scoreTimeThreshold1.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.scoreTimeThreshold1.Location = new System.Drawing.Point(1059, 683);
-            this.scoreTimeThreshold1.Name = "scoreTimeThreshold1";
-            this.scoreTimeThreshold1.Size = new System.Drawing.Size(47, 44);
-            this.scoreTimeThreshold1.TabIndex = 12;
-            this.scoreTimeThreshold1.Text = "1";
-            this.scoreTimeThreshold1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.scoreTimeThreshold1.UseVisualStyleBackColor = false;
-            // 
-            // scoreTimeThreshold2
-            // 
-            this.scoreTimeThreshold2.BackColor = System.Drawing.Color.Lime;
-            this.scoreTimeThreshold2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.scoreTimeThreshold2.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.scoreTimeThreshold2.Location = new System.Drawing.Point(1059, 632);
-            this.scoreTimeThreshold2.Name = "scoreTimeThreshold2";
-            this.scoreTimeThreshold2.Size = new System.Drawing.Size(47, 44);
-            this.scoreTimeThreshold2.TabIndex = 13;
-            this.scoreTimeThreshold2.Text = "2";
-            this.scoreTimeThreshold2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.scoreTimeThreshold2.UseVisualStyleBackColor = false;
-            this.scoreTimeThreshold2.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // scoreTimeThreshold3
-            // 
-            this.scoreTimeThreshold3.BackColor = System.Drawing.Color.Lime;
-            this.scoreTimeThreshold3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.scoreTimeThreshold3.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.scoreTimeThreshold3.Location = new System.Drawing.Point(1059, 581);
-            this.scoreTimeThreshold3.Name = "scoreTimeThreshold3";
-            this.scoreTimeThreshold3.Size = new System.Drawing.Size(47, 44);
-            this.scoreTimeThreshold3.TabIndex = 14;
-            this.scoreTimeThreshold3.Text = "3";
-            this.scoreTimeThreshold3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.scoreTimeThreshold3.UseVisualStyleBackColor = false;
+            this.leftTeamMember.KeyDown += new System.Windows.Forms.KeyEventHandler(this.leftTeamMember_KeyDown);
             // 
             // rightTeamMember
             // 
@@ -284,7 +213,7 @@
             // startGameButton
             // 
             this.startGameButton.Location = new System.Drawing.Point(878, 201);
-            this.startGameButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.startGameButton.Margin = new System.Windows.Forms.Padding(4);
             this.startGameButton.Name = "startGameButton";
             this.startGameButton.Size = new System.Drawing.Size(135, 33);
             this.startGameButton.TabIndex = 16;
@@ -358,23 +287,35 @@
             this.panel1.ContextMenuStrip = this.contextMenuStrip1;
             this.panel1.Controls.Add(this.restStartButton);
             this.panel1.Controls.Add(this.startGameButton);
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(3, 121);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1980, 999);
             this.panel1.TabIndex = 21;
             this.panel1.Click += new System.EventHandler(this.panel1_Click);
+            this.panel1.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.panel1_PreviewKeyDown);
             // 
             // restStartButton
             // 
             this.restStartButton.Location = new System.Drawing.Point(878, 243);
-            this.restStartButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.restStartButton.Margin = new System.Windows.Forms.Padding(4);
             this.restStartButton.Name = "restStartButton";
             this.restStartButton.Size = new System.Drawing.Size(135, 33);
             this.restStartButton.TabIndex = 16;
             this.restStartButton.Text = "휴식시작";
             this.restStartButton.UseVisualStyleBackColor = true;
             this.restStartButton.Click += new System.EventHandler(this.restStartButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("맑은 고딕", 180F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(749, 243);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(445, 353);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "vs";
             // 
             // Form1
             // 
@@ -387,23 +328,19 @@
             this.Controls.Add(this.rightTeamScore);
             this.Controls.Add(this.leftTeamScore);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.scoreTimeThreshold3);
-            this.Controls.Add(this.scoreTimeThreshold2);
-            this.Controls.Add(this.scoreTimeThreshold1);
             this.Controls.Add(this.rightTeamMember);
             this.Controls.Add(this.leftTeamMember);
-            this.Controls.Add(this.attackTeamTimeLabelText);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.gameModeLabel);
             this.Controls.Add(this.rightTeamName);
             this.Controls.Add(this.leftTeamName);
-            this.Controls.Add(this.attackTeamTimeLabel);
             this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Drone Sports";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -418,18 +355,13 @@
         private TextBox leftTeamName;
         private TextBox rightTeamName;
         private System.Windows.Forms.Timer timer1;
-        private Label attackTeamTimeLabel;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem 코트체인지ToolStripMenuItem;
         private ToolStripMenuItem 경기중지ToolStripMenuItem;
         private ToolStripMenuItem 경기리셋ToolStripMenuItem;
         private Label gameModeLabel;
         private TextBox textBox3;
-        private TextBox attackTeamTimeLabelText;
         private TextBox leftTeamMember;
-        private Button scoreTimeThreshold1;
-        private Button scoreTimeThreshold2;
-        private Button scoreTimeThreshold3;
         private TextBox rightTeamMember;
         private PictureBox pictureBox1;
         private ToolStripMenuItem 이미지삽입ToolStripMenuItem;
@@ -442,5 +374,6 @@
         private Panel panel1;
         private Button restStartButton;
         private ToolStripMenuItem 설정ToolStripMenuItem;
+        private Label label1;
     }
 }
